@@ -14,9 +14,7 @@ module.exports = async(client, message) => {
     if(!message.content.startsWith(prefix)){
         f = f.toLowerCase()
         commands = commands.toLowerCase()
-        var str = message.content;
         const cmd = client.commands.get(commands);
-        
     }
 
     if(!cmd) return;

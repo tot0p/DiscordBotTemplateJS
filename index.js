@@ -7,6 +7,8 @@ client.login("YOUR-TOKKEN");
 
 client.commands = new Discord.Collection();
 
+
+//load all commands
 fs.readdir("./Commandes/",(error, f) => {
     if(error) console.log(error);
 
@@ -22,6 +24,8 @@ fs.readdir("./Commandes/",(error, f) => {
     });
 });
 
+
+// load all the events
 fs.readdir("./Events/",(error, f) => {
     if(error) console.log(error);
     console.log(`${f.length} events en chargement`);

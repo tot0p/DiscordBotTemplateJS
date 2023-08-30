@@ -1,5 +1,6 @@
-const Discord = require('discord.js');
-const prefix = "!"; // the prefix
+
+
+const {prefix} = require('../config.json'); // get the prefix from the config file
 
 module.exports = async(client, message) => {
     if(message.author.bot) return; // if the message is from a bot
@@ -11,10 +12,11 @@ module.exports = async(client, message) => {
     var f = message.content.slice(/ +/g)[0];
     var commands = args.shift();
 
+
     if(message.content.startsWith(prefix)){ // if the message start with the prefix
         commands = commands.toLowerCase()
-        const cmd = client.commands.get(commands); // get the command
-    }
+        cmd = client.commands.get(commands); // get the command
+    }else cmd = false;
 
     if(!cmd) return; // if the command doesn't exist
     //else

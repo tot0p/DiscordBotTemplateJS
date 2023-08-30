@@ -1,0 +1,24 @@
+{
+  "name": "discordbottemplatejs",
+  "version": "1.0.0",
+  "description": "Is a simple Template For a discord bot in javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tot0p/DiscordBotTemplateJS.git"
+  },
+  "author": "tot0p",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tot0p/DiscordBotTemplateJS/issues"
+  },
+  "homepage": "https://github.com/tot0p/DiscordBotTemplateJS#readme",
+  "dependencies": {
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "fs": "0.0.1-security"
+  }
+}

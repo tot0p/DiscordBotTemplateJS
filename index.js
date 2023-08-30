@@ -1,11 +1,22 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client, GatewayIntentBits,Collection } = require('discord.js');
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+	],
+});
+
+require('dotenv').config()
+
+
 
 const fs = require('fs');
 
-client.login("YOUR-TOKKEN");
+client.login(process.env.token);
 
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 
 
 //load all commands
@@ -19,7 +30,6 @@ fs.readdir("./Commandes/",(error, f) => {
         
         let commande = require(`./Commandes/${f}`);
         console.log(`${f} chargée`);
-
         client.commands.set(commande.help.name, commande);
     });
 });

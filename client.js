@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits,Collection } = require('discord.js');
+const { Client, GatewayIntentBits,Collection, REST, Routes } = require('discord.js');
 
 
 module.exports.client = new Client({
@@ -13,9 +13,15 @@ module.exports.client = new Client({
 require('dotenv').config()
 const fs = require('fs');
 
-module.exports.client.login(process.env.token);
+const token = process.env.token
+
+
+module.exports.client.login(token);
+const rest = new REST({ version: '10' }).setToken(token);
 
 module.exports.client.commands = new Collection();
+module.exports.client.slashCommands = new Collection();
+
 
 /**
  * @description load Prefix Commands from ./Commandes/prefix
@@ -73,6 +79,30 @@ module.exports.client.reloadPrefixCommands = function(){
             console.log(`${f} rechargée`);
             module.exports.client.commands.set(commande.help.name, commande);
         });
+    });
+}
+
+
+/**
+ * @description load Slash Commands from ./Commandes/slash
+ */
+module.exports.client.loadSlashCommands = function(){
+    fs.readdir("./Commandes/slash",(error, f) => {
+        if(error) console.log(error);
+
+        let commandes = f.filter(f => f.split(".").pop() === "js");
+        if(commandes.length <= 0) console.log("aucune commande trouvée");
+        commandes.forEach((f) => {
+
+            let commande = require(`./Commandes/slash/${f}`);
+            console.log(`${f} chargée`);
+            module.exports.client.slashCommands.set(commande.data.name, commande);
+        });
+
+        let jsoncommands =  module.exports.client.slashCommands.map((command) => command.data.toJSON());
+        rest.put(Routes.applicationCommands(process.env.clientId), { body: jsoncommands })
+            .then(() => console.log('Successfully registered application commands.'))
+            .catch(console.error);
     });
 }
 

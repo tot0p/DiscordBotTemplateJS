@@ -106,6 +106,28 @@ module.exports.client.loadSlashCommands = function(){
     });
 }
 
+/**
+ * @description unload Slash Commands from ./Commandes/slash
+    */
+module.exports.client.unloadSlashCommands = function(){
+    fs.readdir("./Commandes/slash",(error, f) => {
+        if(error) console.log(error);
+
+        let commandes = f.filter(f => f.split(".").pop() === "js");
+        if(commandes.length <= 0) console.log("aucune commande trouvée");
+        commandes.forEach((f) => {
+
+            let commande = require(`./Commandes/slash/${f}`);
+            console.log(`${f} déchargée`);
+            module.exports.client.slashCommands.delete(commande.data.name);
+        });
+
+        rest.put(Routes.applicationCommands(process.env.clientId), { body: [] })
+            .then(() => console.log('Successfully deleted application commands.'))
+            .catch(console.error);
+    });
+}
+
 
 // load all the events
 fs.readdir("./Events/",(error, f) => {
@@ -119,3 +141,10 @@ fs.readdir("./Events/",(error, f) => {
     module.exports.client.on(event, arg => eventsours(module.exports.client, arg));
     });
 });
+
+
+module.exports.client.close = () => {
+    module.exports.client.unloadSlashCommands();
+    module.exports.client.destroy();
+    process.exit();
+}

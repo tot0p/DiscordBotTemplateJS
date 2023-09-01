@@ -109,7 +109,7 @@ module.exports.client.loadSlashCommands = function(){
 /**
  * @description unload Slash Commands from ./Commandes/slash
     */
-module.exports.client.unloadSlashCommands = function(){
+module.exports.client.unloadSlashCommands = function(callback=()=>{}){
     fs.readdir("./Commandes/slash",(error, f) => {
         if(error) console.log(error);
 
@@ -123,7 +123,10 @@ module.exports.client.unloadSlashCommands = function(){
         });
 
         rest.put(Routes.applicationCommands(process.env.clientId), { body: [] })
-            .then(() => console.log('Successfully deleted application commands.'))
+            .then(() =>{
+                console.log('Successfully deleted application commands.');
+                callback();
+            })
             .catch(console.error);
     });
 }
@@ -144,7 +147,5 @@ fs.readdir("./Events/",(error, f) => {
 
 
 module.exports.client.close = () => {
-    module.exports.client.unloadSlashCommands();
-    module.exports.client.destroy();
-    process.exit();
+    module.exports.client.unloadSlashCommands(() => process.exit());
 }

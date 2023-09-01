@@ -85,6 +85,7 @@ module.exports.client.reloadPrefixCommands = function(){
 
 /**
  * @description load Slash Commands from ./Commandes/slash
+ * @param {function} callback
  */
 module.exports.client.loadSlashCommands = function(callback=()=>{}){
     fs.readdir("./Commandes/slash",(error, f) => {
@@ -111,7 +112,8 @@ module.exports.client.loadSlashCommands = function(callback=()=>{}){
 
 /**
  * @description unload Slash Commands from ./Commandes/slash
-    */
+ * @param {function} callback
+*/
 module.exports.client.unloadSlashCommands = function(callback=()=>{}){
     fs.readdir("./Commandes/slash",(error, f) => {
         if(error) console.log(error);
@@ -135,6 +137,15 @@ module.exports.client.unloadSlashCommands = function(callback=()=>{}){
 }
 
 
+/**
+ * @description reload Slash Commands from ./Commandes/slash
+ * @param {function} callback
+*/
+module.exports.client.reloadSlashCommands = function(callback=()=>{}){
+    module.exports.client.slashCommands.clear();
+    module.exports.client.loadSlashCommands(callback);
+}
+
 // load all the events
 fs.readdir("./Events/",(error, f) => {
     if(error) console.log(error);
@@ -150,6 +161,7 @@ fs.readdir("./Events/",(error, f) => {
 
 /**
  * @description close the client
+ * @param {function} callback
 */
 module.exports.client.close = (callback=()=>{}) => {
     module.exports.client.unloadSlashCommands(() =>{

@@ -86,7 +86,7 @@ module.exports.client.reloadPrefixCommands = function(){
 /**
  * @description load Slash Commands from ./Commandes/slash
  */
-module.exports.client.loadSlashCommands = function(){
+module.exports.client.loadSlashCommands = function(callback=()=>{}){
     fs.readdir("./Commandes/slash",(error, f) => {
         if(error) console.log(error);
 
@@ -101,7 +101,10 @@ module.exports.client.loadSlashCommands = function(){
 
         let jsoncommands =  module.exports.client.slashCommands.map((command) => command.data.toJSON());
         rest.put(Routes.applicationCommands(process.env.clientId), { body: jsoncommands })
-            .then(() => console.log('Successfully registered application commands.'))
+            .then(() =>{
+                console.log('Successfully registered application commands.');
+                callback();
+            })
             .catch(console.error);
     });
 }
@@ -145,7 +148,13 @@ fs.readdir("./Events/",(error, f) => {
     });
 });
 
-
-module.exports.client.close = () => {
-    module.exports.client.unloadSlashCommands(() => process.exit());
+/**
+ * @description close the client
+*/
+module.exports.client.close = (callback=()=>{}) => {
+    module.exports.client.unloadSlashCommands(() =>{
+        callback();
+        module.exports.client.destroy();
+        process.exit()
+    });
 }
